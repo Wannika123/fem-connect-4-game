@@ -1,0 +1,143 @@
+.container {
+    width: 100%;
+    position: relative;
+}
+
+.grid-container {
+    width: 90%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 44px;
+}
+
+.holder {
+    grid-row-start: 2;
+    grid-column: 1 / -1;
+    margin-top: 50px;
+}
+
+.player {
+    position: relative;
+    text-align: center;
+    background-color: var(--White);
+    color: var(--Black);
+    border: var(--Black-Border);
+    box-shadow: var(--Black-Shadow);
+    border-radius: 20px;
+    padding: 10px;
+    width: 8.875rem;
+}
+
+.red-player {
+    margin-left: 16px;
+}
+
+.yellow-player {
+    grid-row-start: 1;
+    grid-column: 2 / -1;
+    justify-self: right;
+    margin-right: 16px;
+}
+
+.player img {
+    position: absolute;
+    top: 50%;
+}
+
+.red-player img {
+    left: 0;
+    translate: -50% -50%;
+}
+
+.yellow-player img {
+    right: 0;
+    translate: 50% -50%;
+}
+
+.player-label {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.win-count {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.bg-decoration {
+    width: 100vw;
+    height: 29vh;
+    position: absolute;   
+    top: calc(100% - 20px);
+    left: 0;
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
+    z-index: -1;
+}
+
+@media (min-width: 690px) {
+    .grid-container {
+        width: 632px;
+        margin-top: 30px;
+    }
+    .holder {
+        margin-top: 32px;
+    }
+    .player {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 17rem;
+        padding: 15px 44px;
+    }
+    .red-player {
+        margin-left: 24px;
+    }
+    .yellow-player {
+        margin-right: 24px;
+        flex-direction: row-reverse;
+    }
+    .player-label{
+        font-size: 1.25rem;
+    }
+    .win-count {
+        font-size: 3.5rem;
+    }
+    .bg-decoration {
+        height: 24vh;
+        top: calc(100% - 50px);
+    }
+}
+
+@media (min-width: 1100px) {
+    .container {
+        margin-top: 5vh;
+    }
+    .grid-container {       
+        grid-template-columns: auto 632px auto;
+        justify-content: center;
+        align-items: center;
+        gap: 60px;
+        margin-top: 5vh;
+    }
+    .holder {
+        grid-row-start: 1;
+        grid-column: 2 / 3;
+        margin-top: 0;
+    }
+    .player {
+        display: block;
+        width: 9.125rem;
+        padding: 46px 0 17px 0;
+    }
+    .yellow-player {
+        grid-column: 3 / 4;
+        justify-self: unset;
+    }
+    .player img {
+        top: 0;
+        left: 50%;
+        translate: -50% -50%;
+    }
+}

@@ -1,0 +1,83 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.header-container button {
+    color: var(--White);
+    background-color: var(--Dark-Purple);
+    border: none;
+    border-radius: 999px;
+    text-transform: uppercase;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    width: 6.75rem;
+}
+
+.header-container button:hover {
+    background-color: var(--Red);
+}
+
+.header-container img {
+    width: 45px;
+    height: auto;
+}
+
+.modal {
+    background-color: var(--Purple);
+    width: 90%;
+    max-width: 480px;
+    border-radius: 40px;
+    border: var(--Black-Border);
+    box-shadow: var(--Black-Shadow);
+    padding: 30px 20px;
+}
+
+.modal::backdrop {
+    background: #00000050;
+}
+
+.modal h1 {
+    color: var(--White);
+    text-align: center;
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+}
+
+.btns-container {
+    display: grid;
+    gap: 24px;
+}
+
+.btns-container button,
+.btns-container a {
+    padding: 20px;
+    text-transform: uppercase;
+}
+
+@media (min-width: 690px) {
+    .header-container {
+        width: 632px;
+        margin: 0 auto;
+        margin-top: 30px;
+    }
+    .header-container img {
+        width: 58px;
+        height: auto;
+    }
+    .modal {
+        padding: 50px 40px;
+    }
+    .modal h1 {
+        margin-bottom: 44px;
+    }
+}
+
+@media (min-width: 1100px) {
+    .header-container {
+        margin-top: 3vh;
+    }
+}

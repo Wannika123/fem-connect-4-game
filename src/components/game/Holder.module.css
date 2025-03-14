@@ -1,0 +1,93 @@
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 632px;
+}
+
+.black-bg {
+    position: relative;
+    z-index: 1;
+}
+
+.white-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.disks-container {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(7, 12.5%);
+    justify-content: space-between;
+    padding: 2.29%;
+    height: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 89.3%;
+    gap: 2.5%;
+    position: relative;
+}
+
+.disks-container img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% calc(-100% - 17px);
+    display: none;
+}
+
+.column:hover img,
+.column:focus img {
+    display: block;
+}
+
+.red-disk, .yellow-disk {
+    padding-top: calc(100% - 6px);  /* 6px is the space for border-top and border-bottom, so that it's perfect circle */
+    border-radius: 50%;
+    border: 3px solid var(--Black);
+    box-shadow: 0 5px #00000050 inset, 0 5px #000;
+    display: none;
+    position: relative;
+}
+
+.red-disk {
+    background-color: var(--Red);
+}
+
+.yellow-disk {
+    background-color: var(--Yellow);
+}
+
+.connect-four {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 70%;
+    height: 70%;
+    border: 10px solid var(--White);
+    border-radius: 50%;
+}
+
+@media (min-width: 690px) {
+    .disks-container {
+        grid-template-columns: repeat(7, 70px);
+        padding: 17px;          
+    }
+    .column {
+        height: 510px;
+        gap: 18px;
+    }
+}

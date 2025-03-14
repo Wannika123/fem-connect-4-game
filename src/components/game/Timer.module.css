@@ -1,0 +1,70 @@
+.red-turn, .yellow-turn, .finished-container {
+    position: absolute;
+    top: calc(100% - 20px);
+    left: 50%;
+    translate: -50%;
+    z-index: 5;
+    text-align: center;
+}
+
+.red-turn, .yellow-turn {
+    width: 197px;
+    height: 165px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-top: 40px;
+}
+
+.red-turn {
+    background-image: url(../../assets/images/turn-background-red.svg);
+    color: var(--White);
+}
+
+.yellow-turn {
+    background-image: url(../../assets/images/turn-background-yellow.svg);
+    color: var(--Black);
+}
+
+.label, .winner {
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.red-turn h1,
+.yellow-turn h1,
+.finished-container h1 {
+    font-size: 3.5rem;
+}
+
+.finished-container {
+    min-width: 291px;
+    padding: 17px;
+    color: var(--Black);
+    background-color: var(--White);
+    border: var(--Black-Border);
+    box-shadow: var(--Black-Shadow);
+    border-radius: 20px;
+}
+
+.finished-container button {
+    border: none;
+    border-radius: 999px;
+    color: var(--White);
+    background-color: var(--Dark-Purple);
+    padding: 10px 21px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.finished-container button:hover {
+    opacity: 0.7;
+    transition: opacity 0.1s;
+}
+
+@media (min-width: 690px) {
+    .red-turn, .yellow-turn, .finished-container {
+        top: calc(100% - 50px);
+    }
+}
