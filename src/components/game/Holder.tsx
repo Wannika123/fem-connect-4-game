@@ -89,11 +89,13 @@ export default function Holder({ mode }: Props) {
             if (lastAddedCol.current === null) return
 
             const rowIndex = disksInHolder[lastAddedCol.current].length - 1;
-            checkConnectFour(lastAddedCol.current, rowIndex, isRedTurn)
+            checkConnectFour(lastAddedCol.current, rowIndex, isRedTurn);
         }
     }, [animating])
 
     useEffect(() => {
+        if (gameFinished.finished) return;
+        
         startTimer();
 
         // cpu's turn  (This logic is simply adding the disk randomly)
@@ -101,17 +103,20 @@ export default function Holder({ mode }: Props) {
             let index = Math.floor(Math.random() * 7);
             if (disksInHolder[index].length >= 6) {
                 const freeColumnIndexes = disksInHolder
-                    .filter(col => col.length < 6)
-                    .map((x, i) => i);
-
+                    .map((col, i) => {
+                        if (col.length < 6) return i
+                    })
+                    .filter(x => x !== undefined);
+      
                 index = freeColumnIndexes[Math.floor(Math.random() * freeColumnIndexes.length)];
+                console.log(index)
             }
             setTimeout(() => {
                 addDisk(index);
                 lastAddedCol.current = index;
             }, 1500);
         }
-    }, [isRedTurn])
+    }, [isRedTurn, gameFinished])
 
     useEffect(() => {
         if (!timerDone) return
@@ -120,8 +125,10 @@ export default function Holder({ mode }: Props) {
         let index = Math.floor(Math.random() * 7);
         if (disksInHolder[index].length >= 6) {
             const freeColumnIndexes = disksInHolder
-                .filter(col => col.length < 6)
-                .map((x, i) => i);
+                .map((col, i) => {
+                    if (col.length < 6) return i
+                })
+                .filter(x => x !== undefined);
 
             index = freeColumnIndexes[Math.floor(Math.random() * freeColumnIndexes.length)];
         }
@@ -164,8 +171,8 @@ export default function Holder({ mode }: Props) {
                 {disksInHolder.map((col, i) => (
                     <div 
                         key={`col-${i}`}
-                        tabIndex={i + 1}
-                        className={`${styles.column}`}
+                        tabIndex={disksInHolder[i].length < 6 ? i + 1 : undefined}
+                        className={styles.column}
                         onFocus={() => setFocusIndex(i)}
                         onClick={() => insertDisk(i)}
                     >

@@ -105,7 +105,6 @@ const GameProvider = ({ children }: {
                     connect4Indexes: indexesArr,
                     winner: disk
                 })
-                console.log(indexesArr)
                 if (disk) {
                     setRedWinCount(prev => prev + 1);
                 } else {
@@ -114,7 +113,17 @@ const GameProvider = ({ children }: {
                 return
             }
         }
-        setIsRedTurn(prevState => !prevState)
+
+        // if the holder is full, start new game
+        if (disksInHolder.every(col => col.length >= 6)) {
+            // need te set this state to trigger the computer's turn when the computer go first in the new game
+            setGameFinished(prev => {
+                return { ...prev, finished: true }
+            })
+            newGame();   
+        } else {
+            setIsRedTurn(prevState => !prevState);
+        }
     }
 
     function newGame() {
@@ -134,12 +143,6 @@ const GameProvider = ({ children }: {
         setGameFinished(initialGameFinished);
         wasRedFirst.current = true;
     }
-
-    useEffect(() => {
-        if (disksInHolder.every(col => col.length >= 6)) {
-            newGame();
-        }
-    }, [disksInHolder])
 
     return (
         <GameContext.Provider value={{ 
