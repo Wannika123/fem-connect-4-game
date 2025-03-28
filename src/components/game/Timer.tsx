@@ -20,7 +20,7 @@ export default function Timer({ mode }: Props) {
     }
 
     let winner = '';
-    if (gameFinished.winner) {
+    if (gameFinished.winner !== null) {
         if (mode === 'cpu') {
             winner = gameFinished.winner ? "you" : "cpu";
         } else {
