@@ -26,7 +26,7 @@ const GameContext = createContext({
     newGame: () => {},
     restart: () => {},
     cpuMove: (): number => { return 1 },
-    availableCols: (holder: Holder) => { return [1] },
+    availableCols: (holder: Holder) => { console.log(holder); return [1] },
     gameFinished: initGameFinished
 })
 
@@ -216,7 +216,7 @@ const GameProvider = ({ children }: {
                 const disk = holder[col][row] 
                 let sub_score = 0
                 
-                for (let di of directions) {
+                for (const di of directions) {
                     let connect = 1
 
                     let opCol = col - di[0]   // col in the opposite direction
@@ -316,13 +316,13 @@ const GameProvider = ({ children }: {
 
             if (stepAhead >= 5) {
                 // When it's already 5 steps ahead, 'evaluate' the game state instead.
-                for (let col of availableCols(holder)) {
+                for (const col of availableCols(holder)) {
                     const nextHolder = play(col, holder, true)
                     v = Math.max(v, evalHolder(nextHolder))
                 }
                 return v
             } else {
-                for (let col of availableCols(holder)) {
+                for (const col of availableCols(holder)) {
                     const nextHolder = play(col, holder, true)                  
                     v = Math.max(v, minimax(col, nextHolder, stepAhead + 1))
 
@@ -335,13 +335,13 @@ const GameProvider = ({ children }: {
             let v = Infinity
     
             if (stepAhead >= 5) {
-                for (let col of availableCols(holder)) {
+                for (const col of availableCols(holder)) {
                     const nextHolder = play(col, holder, false)
                     v = Math.min(v, evalHolder(nextHolder))
                 }
                 return v
             } else {
-                for (let col of availableCols(holder)) {
+                for (const col of availableCols(holder)) {
                     const nextHolder = play(col, holder, false)
                     v = Math.min(v, minimax(col, nextHolder, stepAhead + 1))
 
@@ -357,7 +357,7 @@ const GameProvider = ({ children }: {
         let moves = []
         
         const possibleCols = availableCols(disksInHolder)
-        for (let col of possibleCols) {
+        for (const col of possibleCols) {
             const nextHolder = play(col, disksInHolder)
             const move = {
                 col: col,
@@ -365,12 +365,9 @@ const GameProvider = ({ children }: {
             }
             moves.push(move)
         }
-        console.log('all', moves)
-        
         const minScore = Math.min(...moves.map(m => m.score))
         moves = moves.filter(m => m.score === minScore)
         
-        console.log('better moves', moves)
         return moves[Math.floor(Math.random() * moves.length)].col
     }
 
