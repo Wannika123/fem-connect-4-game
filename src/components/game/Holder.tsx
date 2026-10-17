@@ -18,7 +18,7 @@ type Props = {
 }
 
 export default function Holder({ mode }: Props) {
-    const { isRedTurn, disksInHolder, addDisk, checkConnectFour, gameFinished } = useContext(GameContext);
+    const { isRedTurn, disksInHolder, addDisk, checkGameFinish, gameFinished, availableCols, cpuMove } = useContext(GameContext);
     const { done: timerDone, startTimer, pauseTimer } = useContext(TimerContext);
 
     const [animating, setAnimating] = useState(false);
@@ -27,6 +27,7 @@ export default function Holder({ mode }: Props) {
     // I hv no idea how to animate responsively, so there'll be the animation only in large tablet and desktop version
     const { width } = useWindowSize();
 
+    // For animation
     const lastAddedCol = useRef<null | number>(null);
     const newlyAddedDisk = useRef<HTMLDivElement>(null);
 
@@ -69,17 +70,19 @@ export default function Holder({ mode }: Props) {
     }
 
     useEffect(() => {
-        if (width < 690) {
-            if (lastAddedCol.current === null) return
-
-            const rowIndex = disksInHolder[lastAddedCol.current].length - 1;
-            checkConnectFour(lastAddedCol.current, rowIndex, isRedTurn);
-            return
-        }
         if (lastAddedCol.current === null) return
 
+        if (width < 690) {
+            // No animation 
+            checkGameFinish(lastAddedCol.current);
+            return
+        }
+
+        // row index of the top-most disk
+        const rowIndex = disksInHolder[lastAddedCol.current].findLastIndex(disk => typeof disk === 'boolean');
+      
         // start the animation
-        firstFrame(disksInHolder[lastAddedCol.current].length)
+        firstFrame(rowIndex + 1)
     }, [disksInHolder])
 
     useEffect(() => {
@@ -88,32 +91,26 @@ export default function Holder({ mode }: Props) {
         } else {
             if (lastAddedCol.current === null) return
 
-            const rowIndex = disksInHolder[lastAddedCol.current].length - 1;
-            checkConnectFour(lastAddedCol.current, rowIndex, isRedTurn);
+            // Check if the game is finished after the animation is ended
+            checkGameFinish(lastAddedCol.current);
         }
     }, [animating])
 
     useEffect(() => {
-        if (gameFinished.finished) return;
+        if (gameFinished.finished) {
+            pauseTimer()
+            lastAddedCol.current = null
+            return
+        }
         
         startTimer();
-
-        // cpu's turn  (This logic is simply adding the disk randomly)
+        
+        // cpu turn
         if (mode === 'cpu' && !isRedTurn) {
-            let index = Math.floor(Math.random() * 7);
-            if (disksInHolder[index].length >= 6) {
-                const freeColumnIndexes = disksInHolder
-                    .map((col, i) => {
-                        if (col.length < 6) return i
-                    })
-                    .filter(x => x !== undefined);
-      
-                index = freeColumnIndexes[Math.floor(Math.random() * freeColumnIndexes.length)];
-                console.log(index)
-            }
             setTimeout(() => {
-                addDisk(index);
-                lastAddedCol.current = index;
+                const col = cpuMove()
+                addDisk(col);
+                lastAddedCol.current = col;
             }, 1500);
         }
     }, [isRedTurn, gameFinished])
@@ -122,16 +119,8 @@ export default function Holder({ mode }: Props) {
         if (!timerDone) return
 
         // When the timer is done, add disk randomly
-        let index = Math.floor(Math.random() * 7);
-        if (disksInHolder[index].length >= 6) {
-            const freeColumnIndexes = disksInHolder
-                .map((col, i) => {
-                    if (col.length < 6) return i
-                })
-                .filter(x => x !== undefined);
-
-            index = freeColumnIndexes[Math.floor(Math.random() * freeColumnIndexes.length)];
-        }
+        const possibleCols = availableCols(disksInHolder)
+        const index = possibleCols[Math.floor(Math.random() * possibleCols.length)]
         addDisk(index);
         lastAddedCol.current = index;
     }, [timerDone])
@@ -171,20 +160,20 @@ export default function Holder({ mode }: Props) {
                 {disksInHolder.map((col, i) => (
                     <div 
                         key={`col-${i}`}
-                        tabIndex={disksInHolder[i].length < 6 ? i + 1 : undefined}
+                        tabIndex={disksInHolder[i][5] === null ? i + 1 : undefined}
                         className={styles.column}
                         onFocus={() => setFocusIndex(i)}
                         onClick={() => insertDisk(i)}
                     >
                         {/* hover effect */}
-                        { disksInHolder[i].length >= 6 
+                        { (!gameFinished.finished && disksInHolder[i][5] !== null)
                             ? undefined 
                             : isRedTurn 
-                                ? <Image className={styles['red-turn']} src={markerRed} alt="" /> 
-                                : mode !== 'cpu' && <Image className={styles['yellow-turn']} src={markerYellow} alt="" />
+                                ? <Image src={markerRed} alt="" /> 
+                                : mode !== 'cpu' && <Image src={markerYellow} alt="" />
                         }
 
-                        {col.map((disk, j, arr) => (
+                        {col.filter(row => row != null).map((disk, j, arr) => (
                             <div 
                                 key={j} 
                                 className={disk ? styles['red-disk'] : styles['yellow-disk']}
