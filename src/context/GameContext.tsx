@@ -155,13 +155,10 @@ const GameProvider = ({ children }: {
                 setYellowWinCount(prev => prev + 1);
             }
         } else if (checkResult.finished) {
-            // No winner
-
-            // need te set this state to trigger the computer's turn when the computer go first in the new game
+            // No winner (draw)
             setGameFinished(prev => {
                 return { ...prev, finished: true }
             })
-            newGame(); 
         } else {
             // The game goes on
             setIsRedTurn(prevState => !prevState);
@@ -345,7 +342,7 @@ const GameProvider = ({ children }: {
                     const nextHolder = play(col, holder, false)
                     v = Math.min(v, minimax(col, nextHolder, stepAhead + 1))
 
-                    if (v === -10000) break
+                    if (v <= -10000) break
                 }
                 return v
             }

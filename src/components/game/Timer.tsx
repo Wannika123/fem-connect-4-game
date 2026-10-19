@@ -36,10 +36,17 @@ export default function Timer({ mode }: Props) {
                     <h1>{time}s</h1>
                 </div>
             }
-            { gameFinished.finished &&
+            { gameFinished.finished && 
                 <div className={styles['finished-container']}>
-                    <div className={styles.winner}>{winner}</div>
-                    <h1>WINS</h1>
+                    { gameFinished.winner !== null 
+                        ? (
+                            <>
+                                <div className={styles.winner}>{winner}</div>
+                                <h1>WINS</h1>
+                            </>
+                        )
+                        : <h1>DRAW</h1>
+                    }
                     <button onClick={newGame}>play again</button>
                 </div>
             }

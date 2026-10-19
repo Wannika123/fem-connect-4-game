@@ -106,12 +106,12 @@ export default function Holder({ mode }: Props) {
         startTimer();
         
         // cpu turn
-        if (mode === 'cpu' && !isRedTurn) {
-            setTimeout(() => {
-                const col = cpuMove()
+        if (mode === 'cpu' && !isRedTurn) {           
+            setTimeout(() => {   
+                const col = cpuMove()          
                 addDisk(col);
                 lastAddedCol.current = col;
-            }, 1500);
+            }, 1200);
         }
     }, [isRedTurn, gameFinished])
 
